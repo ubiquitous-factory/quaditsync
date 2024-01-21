@@ -83,11 +83,14 @@ impl GitSync {
         }
 
         let repository: Repository = Repository::open(&self.dir)?;
+
         let mut remote = repository.find_remote("origin")?;
+
         remote.fetch(&["HEAD"], Some(&mut fetch_options), None)?;
 
         let mut fetch_head = repository.find_reference("FETCH_HEAD")?;
         let fetch_commit = repository.reference_to_annotated_commit(&fetch_head)?;
+
         let analysis = repository.merge_analysis(&[&fetch_commit])?;
 
         if analysis.0.is_up_to_date() {
@@ -103,6 +106,19 @@ impl GitSync {
             Some(s) => s.to_string(),
             None => String::from_utf8_lossy(fetch_head.name_bytes()).to_string(),
         };
+
+        let headid = match repository.head() {
+            Ok(s) => {
+                let target = match s.target() {
+                    Some(o) => o.to_string(),
+                    None => String::from("UNKNOWN"),
+                };
+                target.to_string()
+            }
+            Err(_) => String::from("UNKNOWN"),
+        };
+        let msg = format!("Moving HEAD from: {} to : {}", headid, fetch_commit.id());
+        info!("{}", msg);
 
         fetch_head.set_target(
             fetch_commit.id(),
