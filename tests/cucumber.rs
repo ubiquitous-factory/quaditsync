@@ -1,5 +1,5 @@
 use cucumber::World as _;
-use gitsync::errors;
+use quaditsync::errors;
 use std::path::PathBuf;
 
 mod steps;

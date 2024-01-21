@@ -1,5 +1,5 @@
 use cucumber::{given, then, when};
-use gitsync::errors;
+use quaditsync::errors;
 use std::path::PathBuf;
 
 use crate::World;
@@ -79,7 +79,7 @@ fn bootstrap_git_repository(world: &mut World) {
     // context that sets up a local bare repository
     world.repo_url = String::from(world.bare_dir.to_str().unwrap());
 
-    let gitsync = gitsync::GitSync {
+    let gitsync = quaditsync::GitSync {
         repo: String::from(world.bare_dir.clone().to_str().unwrap()),
         dir: world.clone_dir.clone(),
         ..Default::default()

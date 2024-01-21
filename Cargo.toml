@@ -1,11 +1,11 @@
 [package]
-name = "gitsync"
+name = "quaditsync"
 version = "0.1.9"
-authors = ["David McKay <david@rawkode.com>"]
+authors = ["Anton Whalley <antonwhalley@yahoo.com>"]
 edition = "2018"
 license = "MIT"
-description = "Library that facilitates monitoring Git repositories for changes. Could enable GitOps"
-repository = "https://github.com/rawkode/gitsync"
+description = "Library that facilitates monitoring Git repositories for changes. Could enable GitOps based on gitsync but extended for quadit"
+repository = "https://github.com/no9/quaditsync"
 
 [dependencies]
 git2 = "0.16"

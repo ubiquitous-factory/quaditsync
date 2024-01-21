@@ -43,7 +43,7 @@ fn no_remote_changes(world: &mut World) {
 
 #[when("I sync")]
 fn sync(world: &mut World) {
-    let gitsync = gitsync::GitSync {
+    let gitsync = quaditsync::GitSync {
         repo: world.repo_url.clone(),
         dir: world.clone_dir.clone(),
         ..Default::default()
