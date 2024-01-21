@@ -84,6 +84,19 @@ impl GitSync {
 
         let repository: Repository = Repository::open(&self.dir)?;
 
+        let headid = match repository.head() {
+            Ok(s) => {
+                let target = match s.target() {
+                    Some(o) => o.to_string(),
+                    None => String::from("UNKNOWN"),
+                };
+                target.to_string()
+            }
+            Err(_) => String::from("UNKNOWN"),
+        };
+
+        info!("Current commit: {}", headid);
+
         let mut remote = repository.find_remote("origin")?;
 
         remote.fetch(&["HEAD"], Some(&mut fetch_options), None)?;
@@ -107,16 +120,6 @@ impl GitSync {
             None => String::from_utf8_lossy(fetch_head.name_bytes()).to_string(),
         };
 
-        let headid = match repository.head() {
-            Ok(s) => {
-                let target = match s.target() {
-                    Some(o) => o.to_string(),
-                    None => String::from("UNKNOWN"),
-                };
-                target.to_string()
-            }
-            Err(_) => String::from("UNKNOWN"),
-        };
         let msg = format!("Moving HEAD from: {} to : {}", headid, fetch_commit.id());
         info!("{}", msg);
 
