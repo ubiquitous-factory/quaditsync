@@ -55,7 +55,7 @@ impl GitSync {
         clean
     }
 
-    pub fn sync(&self) -> Result<(), errors::GitSyncError> {
+    pub fn sync(&self) -> Result<(String, String), errors::GitSyncError> {
         if !self.check_worktree_is_clean() {
             return Err(GitSyncError::WorkTreeNotClean);
         }
@@ -107,7 +107,7 @@ impl GitSync {
         let analysis = repository.merge_analysis(&[&fetch_commit])?;
 
         if analysis.0.is_up_to_date() {
-            return Ok(());
+            return Ok((headid.clone(), headid.clone()));
         }
 
         // We only support fast forward merges for now
@@ -137,7 +137,7 @@ impl GitSync {
                 .force(),
         ))?;
 
-        Ok(())
+        Ok((headid, fetch_commit.id().to_string()))
     }
 
     fn clone_repository(&self) -> Result<(), errors::GitSyncError> {

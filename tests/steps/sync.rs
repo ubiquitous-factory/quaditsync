@@ -50,7 +50,11 @@ fn sync(world: &mut World) {
     };
 
     let sync_error = match gitsync.sync() {
-        Ok(_) => None,
+        Ok(r) => {
+            assert!(r.0.len() > 0);
+            assert!(r.1.len() > 0);
+            None
+        }
         Err(e) => Some(e),
     };
 
