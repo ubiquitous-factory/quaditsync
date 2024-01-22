@@ -6,13 +6,6 @@ use std::path::{Path, PathBuf};
 
 pub mod errors;
 
-// When running tests, we can just use println instead of logger
-#[cfg(not(test))]
-use log::info;
-
-#[cfg(test)]
-use std::println as info;
-
 #[derive(Clone, Debug, Default)]
 pub struct GitSync {
     pub repo: String,
@@ -95,8 +88,6 @@ impl GitSync {
             Err(_) => String::from("UNKNOWN"),
         };
 
-        info!("Current commit: {}", headid);
-
         let mut remote = repository.find_remote("origin")?;
 
         remote.fetch(&["HEAD"], Some(&mut fetch_options), None)?;
@@ -120,9 +111,6 @@ impl GitSync {
             None => String::from_utf8_lossy(fetch_head.name_bytes()).to_string(),
         };
 
-        let msg = format!("Moving HEAD from: {} to : {}", headid, fetch_commit.id());
-        info!("{}", msg);
-
         fetch_head.set_target(
             fetch_commit.id(),
             format!("fast-forward from {} to {}", name, fetch_commit.id()).as_str(),
@@ -141,8 +129,6 @@ impl GitSync {
     }
 
     fn clone_repository(&self) -> Result<(), errors::GitSyncError> {
-        info!("Attempting to clone {} to {:?}", self.repo, self.dir,);
-
         if !self.dir.exists() {
             match std::fs::create_dir_all(&self.dir) {
                 Ok(_) => {}

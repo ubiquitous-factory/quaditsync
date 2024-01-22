@@ -1,6 +1,6 @@
 [package]
 name = "quaditsync"
-version = "1.0.0"
+version = "1.0.1"
 authors = ["Anton Whalley <antonwhalley@yahoo.com>"]
 edition = "2018"
 license = "MIT"
